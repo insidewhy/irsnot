@@ -2,13 +2,12 @@
 
 irsnot is an irssi script that creates desktop notifications based on dbus. Message timeouts can be configured per nick.
 
-## installing
+## installation
     $ git clone git://github.com/tuxjay/irsnot.git
     $ cp irsnot/irsnot.pl ~/.irssi/scripts/
     $ cp irsnot/irsnotrc.sample ~/.irssi/irsnotrc
 
-## configuring
-
+## configuration
 The configuration file lives at ~/.irssi/irsnotrc. Here is a sample:
     # use this to set the default notification time for private messages.
     # this shows the default of 5000ms or 5s
@@ -31,10 +30,11 @@ The configuration file lives at ~/.irssi/irsnotrc. Here is a sample:
     nick hrbossman 50000000
 
 ## commands
-
 Reload the configuration file.
     /irsnot_reload
 
 Issue a command (anything in the config file works here).
     /irsnot nick annoyingGuy 0
 
+## dependencies
+* perl Desktop::Notify module.
