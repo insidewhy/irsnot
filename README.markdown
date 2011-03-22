@@ -1,6 +1,6 @@
 # irsnot
 
-irsnot is an irssi script that creates desktop notifications based on dbus. Message timeouts can be configured per nick.
+irsnot is an irssi script that creates desktop notifications based on dbus. Notification timeouts can be configured per nick/channel.
 
 ## installation
     $ git clone git://github.com/tuxjay/irsnot.git
