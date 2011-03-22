@@ -4,9 +4,8 @@ irsnot is an irssi script that creates desktop notifications based on dbus. Mess
 
 ## installing
     $ git clone git://github.com/tuxjay/irsnot.git
-    $ cd irsnot
     $ cp irsnot/irsnot.pl ~/.irssi/scripts/
-    $ cd irsnot/irsnotrc.sample ~/.irssi/irsnotrc
+    $ cp irsnot/irsnotrc.sample ~/.irssi/irsnotrc
 
 ## configuring
 
