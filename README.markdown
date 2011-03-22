@@ -7,6 +7,9 @@ irsnot is an irssi script that creates desktop notifications based on dbus. Mess
     $ cp irsnot/irsnot.pl ~/.irssi/scripts/
     $ cp irsnot/irsnotrc.sample ~/.irssi/irsnotrc
 
+Then from irssi
+    $ /script load irsnot
+
 ## configuration
 The configuration file lives at ~/.irssi/irsnotrc. Here is a sample:
     # use this to set the default notification time for private messages.
