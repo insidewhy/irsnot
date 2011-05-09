@@ -68,14 +68,14 @@ sub sanitize_msg {
 
 sub notify {
     my ($summary, $msg) = @_;
-    $notify->create(summary => $summary, body => sanitize_msg($msg),
+    $notify->create(summary => sanitize_msg($summary), body => sanitize_msg($msg),
         timeout => Irssi::settings_get_str('notify_time'))->show();
 }
 
 sub notify_timeout {
     my ($summary, $msg, $timeout) = @_;
     if ($timeout) {
-        $notify->create(summary => $summary, body => sanitize_msg($msg),
+        $notify->create(summary => sanitize_msg($summary), body => sanitize_msg($msg),
             timeout => $timeout)->show();
     }
 }
