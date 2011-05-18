@@ -47,8 +47,8 @@ $VERSION = "0.01";
 my %channels;
 my %nicks;
 
-my $default_nick_timeout = 5000;
-my $default_chan_timeout = 0;
+my $default_nick = { timeout => 5000 };
+my $default_chan = { timeout => 0 };
 
 Irssi::settings_add_str('irsnot', 'notify_icon', 'gtk-dialog-info');
 
@@ -66,17 +66,24 @@ sub sanitize_msg {
     return $msg;
 }
 
-sub notify {
+sub notify_simple {
     my ($summary, $msg) = @_;
-    $notify->create(summary => sanitize_msg($summary), body => sanitize_msg($msg),
-        timeout => Irssi::settings_get_str('notify_time'))->show();
+    $notify->create(
+        summary => sanitize_msg($summary),
+        body    => sanitize_msg($msg),
+        timeout => Irssi::settings_get_str('notify_time')
+    )->show();
 }
 
-sub notify_timeout {
-    my ($summary, $msg, $timeout) = @_;
+sub notify {
+    my ($summary, $msg, $conf) = @_;
+    my $timeout = $conf->{'timeout'};
     if ($timeout) {
-        $notify->create(summary => sanitize_msg($summary), body => sanitize_msg($msg),
-            timeout => $timeout)->show();
+        $notify->create(
+            summary => sanitize_msg($summary),
+            body    => sanitize_msg($msg),
+            timeout => $timeout
+        )->show();
     }
 }
 
@@ -89,7 +96,7 @@ sub print_text_notify {
     $sender =~ s/^\<.([^\>]+)\>.+/\1/ ;
     $stripped =~ s/^\<.[^\>]+\>.// ;
     my $summary = $dest->{target} . ": " . $sender;
-    notify($summary, $stripped);
+    notify_simple($summary, $stripped);
 }
 
 sub message_private_notify {
@@ -98,11 +105,11 @@ sub message_private_notify {
 
     my $meta = $nicks{$nick};
     if ($meta) {
-        notify_timeout("<$nick>", $msg, $meta->{'timeout'});
+        notify("<$nick>", $msg, $meta);
         return;
     }
     else {
-        notify_timeout("<$nick>", $msg, $default_nick_timeout);
+        notify("<$nick>", $msg, $default_nick);
     }
 }
 
@@ -112,10 +119,10 @@ sub message_public_notify {
 
     my $meta = $nicks{$nick} || $channels{$target};
     if ($meta) {
-        notify_timeout("<$nick|$target>", $msg, $meta->{'timeout'});
+        notify("<$nick|$target>", $msg, $meta);
     }
     else {
-        notify_timeout("<$nick|$target>", $msg, $default_chan_timeout);
+        notify("<$nick|$target>", $msg, $default_chan);
     }
 }
 
@@ -123,7 +130,7 @@ sub dcc_request_notify {
     my ($dcc, $sendaddr) = @_;
     my $server = $dcc->{server};
     return if (!$dcc);
-    notify("DCC ".$dcc->{type}." request", $dcc->{nick});
+    notify_simple("DCC ".$dcc->{type}." request", $dcc->{nick});
 }
 
 sub load_config {
@@ -148,9 +155,9 @@ sub cmd_reload {
 sub bind_line {
     my $line = shift;
 
-    if ($line =~ /^\s*chan(?:nel)?\s+([#&]?\w+|\*)\s+(\d+)\s*$/) {
+    if ($line =~ /^\s*chan(?:nel)?\s+([#&]?\S+|\*)\s+(\d+)\s*$/) {
         if ($1 eq '*') {
-            $default_chan_timeout = $2;
+            $default_chan->{'timeout'} = $2;
         }
         else {
             $channels{$1}->{'timeout'} = $2;
@@ -159,7 +166,7 @@ sub bind_line {
     elsif ($line =~ /^\s*nick\s+(\w+|\*)\s+(\d+)\s*$/) {
         $nicks{$1}->{'timeout'} = $2;
         if ($1 eq '*') {
-            $default_nick_timeout = $2;
+            $default_nick->{'timeout'} = $2;
         }
         else {
             $nicks{$1}->{'timeout'} = $2;
