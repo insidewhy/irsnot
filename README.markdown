@@ -8,9 +8,11 @@ irsnot is an irssi script that creates desktop notifications based on dbus. Noti
     $ cp irsnot/irsnotrc.sample ~/.irssi/irsnotrc
 
 To load the script from irssi:
-    $ /script load irsnot
+
+    /script load irsnot
 
 For Arch Linux irsnot is in the AUR and can be installed globally with a command such as:
+
     $ yaourt -S irsnot
 
 ## configuration
