@@ -15,6 +15,7 @@ For Arch Linux irsnot is in the AUR and can be installed globally with a command
 
 ## configuration
 The configuration file lives at ~/.irssi/irsnotrc. Here is a sample:
+
     # use this to set the default notification time for private messages.
     # this shows the default of 5000ms or 5s
     # nick * 5000
