@@ -3,7 +3,7 @@
 irsnot is an irssi script that creates desktop notifications based on dbus. Notification timeouts can be configured per nick/channel.
 
 ## installation
-    $ git clone git://github.com/tuxjay/irsnot.git
+    $ git clone git://github.com/nuisanceofcats/irsnot.git
     $ cp irsnot/irsnot.pl ~/.irssi/scripts/
     $ cp irsnot/irsnotrc.sample ~/.irssi/irsnotrc
 
@@ -13,7 +13,7 @@ To load the script from irssi:
 
 For Arch Linux irsnot is in the AUR and can be installed globally with a command such as:
 
-    $ yaourt -S irsnot
+    $ yaourt -S irsnot-git
 
 ## configuration
 The configuration file lives at ~/.irssi/irsnotrc. Here is a sample:
