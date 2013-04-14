@@ -85,6 +85,8 @@ sub notify {
             timeout => $timeout
         )->show();
     }
+    my $cmd = $conf->{'command'};
+    `$cmd` if ($cmd);
 }
 
 sub print_text_notify {
@@ -105,11 +107,11 @@ sub message_private_notify {
 
     my $meta = $nicks{$nick};
     if ($meta) {
-        notify("<$nick>", $msg, $meta);
+        notify($nick, $msg, $meta);
         return;
     }
     else {
-        notify("<$nick>", $msg, $default_nick);
+        notify($nick, $msg, $default_nick);
     }
 }
 
@@ -119,10 +121,10 @@ sub message_public_notify {
 
     my $meta = $nicks{$nick} || $channels{$target};
     if ($meta) {
-        notify("<$nick|$target>", $msg, $meta);
+        notify("$nick|$target", $msg, $meta);
     }
     else {
-        notify("<$nick|$target>", $msg, $default_chan);
+        notify("$nick|$target", $msg, $default_chan);
     }
 }
 
@@ -163,14 +165,10 @@ sub bind_line {
             $channels{$1}->{'timeout'} = $2;
         }
     }
-    elsif ($line =~ /^\s*nick\s+(\w+|\*)\s+(\d+)\s*$/) {
-        $nicks{$1}->{'timeout'} = $2;
-        if ($1 eq '*') {
-            $default_nick->{'timeout'} = $2;
-        }
-        else {
-            $nicks{$1}->{'timeout'} = $2;
-        }
+    elsif ($line =~ /^\s*nick\s+(\w+|\*)\s+(\d+)(?:\s+(.+?))?\s*$/) {
+        my $nick = $1 eq '*' ?  $default_nick : $nicks{$1} = {};
+        $nick->{'timeout'} = $2;
+        $nick->{'command'} = $3 if ($3);
     }
     else {
         Irssi::print("Invalid irsnot command `$line'");
