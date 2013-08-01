@@ -86,7 +86,7 @@ sub notify {
         )->show();
     }
     my $cmd = $conf->{'command'};
-    `$cmd` if ($cmd);
+    system($cmd) if ($cmd);
 }
 
 sub print_text_notify {
